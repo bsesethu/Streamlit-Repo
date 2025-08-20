@@ -1,8 +1,11 @@
+# From Ketro Live session 13/08/2025
 # Streamlit Student Dashboard (simple + no matplotlib)
 # Save as: student_dashboard_simple.py
 # Run:
 #   pip install streamlit pandas numpy
 #   streamlit run student_dashboard_simple.py
+
+#NOTE See 'Streamlit Student Dashboard Code Explanation' in Gemini for the explanation of this program
 
 import streamlit as st
 import pandas as pd
