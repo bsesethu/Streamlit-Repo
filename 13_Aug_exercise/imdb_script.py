@@ -8,6 +8,7 @@ from functions_Assignment_2 import Data_Preperation as DaP
 from functions_Assignment_2 import Data_Visualisation as DaV
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.express as px
 
 
 df = pd.read_csv('13_Aug_exercise/imdb_top_1000.csv')
@@ -151,7 +152,7 @@ print('Anthony Russo is the director with the highest average Gross')
 #--------------------------------------
 
 # Narrow down the columns in the DF
-df_st = df_res[['Series_Title', 'Released_Decade', 'Certificate', 'Runtime', 'Genre', 'IMDB_Rating', 'Director', 'Lead_Actors', 'Gross']]
+df_st = df_res[['Series_Title', 'Released_Decade', 'Certificate', 'No_of_Votes', 'Runtime', 'Genre', 'IMDB_Rating', 'Director', 'Lead_Actors', 'Gross']]
 print(df_st.info())
 # App setup
 st.set_page_config(page_title= 'IMDB Top 100 Movies and Series', layout= 'wide')
@@ -163,7 +164,7 @@ st.caption('')
 st.sidebar.header('🔎 Filters')
 release_decade = st.sidebar.multiselect('Released_Decade', sorted(df_st['Released_Decade'].unique()), default= sorted(df_st['Released_Decade'].unique()))
 certificate = st.sidebar.multiselect('Certificate', sorted(df_st['Certificate'].unique()), default= sorted(df_st['Certificate'].unique()))
-genre = st.sidebar.multiselect('Genre', sorted(df_st['Genre'].unique()), default= sorted(df['Genre'].unique()))
+# genre = st.sidebar.multiselect('Genre', sorted(df_st['Genre'].unique()), default= sorted(df['Genre'].unique()))
 imdb = st.sidebar.slider('IMDB Rating', df_st['IMDB_Rating'].min(), df_st['IMDB_Rating'].max(), df_st['IMDB_Rating'].mean())
 gross = st.sidebar.slider('Gross', df_st['Gross'].min().astype(float), df_st['Gross'].max().astype(float), df_st['Gross'].mean())
 
@@ -174,8 +175,6 @@ mask = ( # Not quite sure what this does
 )
 fdf = df_st.loc[mask].copy()
 st.sidebar.success(f'Activate filters → Rows: {len(fdf)} / {len(df_st)}')
-
-st.divider()
 # KPIs
 #-------------------------
 
@@ -191,3 +190,34 @@ st.download_button("⬇️ Download filtered CSV", csv_buf.getvalue(), "students
 
 st.divider()
 
+# CHARTS
+    # Plot 1
+st.subheader(f'Box Plot of IMDB Rating by Certificate')
+fig = px.box(fdf, x='IMDB_Rating', y='Certificate', title='Box Plot of IMDB Rating by Certificate')
+if len(fdf):
+    st.plotly_chart(fig)
+else:
+    st.info('No data after filters')
+
+st.divider()
+
+    # Plot 2
+    # First convert Gross to number value
+st.subheader(f'Scatter plot of Gross vs. No_of_votes')
+if len(fdf):
+    st.scatter_chart(fdf, x= 'Gross', y= 'No_of_Votes', color= '#ffaa00')
+else:
+    st.info('No data after filters')
+
+st.divider()
+    
+    # Plot 3
+# Bar plot of Genre frequency
+    # First need to find the top 10 genre frequency of occurance. Already created, just use it
+# if len(df_Genre_top10):
+#     st.bar_chart(df_Genre_top10, x= 'Genre', y= 'Frequency')
+# else:
+#     st.info('No data after filters')
+    
+
+st.caption("Tip: Use the sidebar to filter. All charts use Streamlit’s built-in chart functions (no matplotlib).")
