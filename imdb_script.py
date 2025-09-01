@@ -11,7 +11,7 @@ import seaborn as sns
 import plotly.express as px
 
 
-df = pd.read_csv('13_Aug_exercise/imdb_top_1000.csv')
+df = pd.read_csv('imdb_top_1000.csv')
 
 # From Assignment 2
 # Check for mising values and document their percantage
